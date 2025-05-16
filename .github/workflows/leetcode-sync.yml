@@ -1,0 +1,31 @@
+name: LeetCode Auto Sync
+
+on:
+  schedule:
+    - cron: '0 8 * * *'  # Runs every day at 8:00 AM UTC
+  workflow_dispatch:     # Allows manual trigger too
+
+jobs:
+  leetcode-sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install leetcode-cli
+        run: npm install -g leetcode-cli
+
+      - name: Run leetcode export
+        run: |
+          leetcode user -l "dorwaladitya" --output ./solutions
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+          git add .
+          git commit -m "Auto update LeetCode solutions on $(date +'%Y-%m-%d')" || echo "No changes to commit"
+          git push
