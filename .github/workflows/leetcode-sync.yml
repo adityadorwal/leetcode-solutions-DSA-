@@ -28,6 +28,11 @@ jobs:
           leetcode user -l "dorwaladitya" --output ./solutions
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
+           
+          # Debug step added here
+          git status
+          git remote -v
+          
           git add .
           git diff --cached --quiet || git commit -m "Auto update LeetCode solutions on $(date +'%Y-%m-%d')"
           git push
